@@ -13,7 +13,7 @@ async function bootstrap() {
 		})
 	)
 
-	const { host, port } = app.get<RestApiConfig>(ConfigService)
+	const { host, port } = app.get(ConfigService).get<RestApiConfig>('server.restApi')
 
 	await app.listen(port, host)
 }

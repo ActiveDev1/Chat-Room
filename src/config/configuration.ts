@@ -11,6 +11,7 @@ export interface DatabaseConfig {
 	db: string
 	username: string
 	password: string
+	uri: string
 }
 
 export default () => ({
@@ -28,7 +29,8 @@ export default () => ({
 			port: +process.env.MONGO_PORT,
 			db: process.env.MONGO_DB,
 			username: process.env.MONGO_USERNAME,
-			password: process.env.MONGO_PASSWORD
+			password: process.env.MONGO_PASSWORD,
+			uri: process.env.MONGO_URI
 		} as DatabaseConfig
 	}
 })

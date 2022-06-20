@@ -22,12 +22,17 @@
 		"@nestjs/mongoose": "^9.1.1",
 		"@nestjs/platform-express": "^8.0.0",
 		"@nestjs/platform-fastify": "^8.4.7",
+		"@nestjs/platform-socket.io": "^8.4.7",
+		"@nestjs/websockets": "^8.4.7",
+		"@socket.io/redis-adapter": "^7.2.0",
 		"cross-env": "^7.0.3",
 		"mongoose": "^6.4.0",
 		"pino-pretty": "^8.0.0",
+		"redis": "^4.1.0",
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",
-		"rxjs": "^7.2.0"
+		"rxjs": "^7.2.0",
+		"socket.io": "^4.5.1"
 	},
 	"devDependencies": {
 		"@nestjs/cli": "^8.0.0",

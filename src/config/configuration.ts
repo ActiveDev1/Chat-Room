@@ -31,6 +31,9 @@ export default () => ({
 			username: process.env.MONGO_USERNAME,
 			password: process.env.MONGO_PASSWORD,
 			uri: process.env.MONGO_URI
-		} as DatabaseConfig
+		} as DatabaseConfig,
+		redis: {
+			uri: process.env.REDIS_URI
+		}
 	}
 })

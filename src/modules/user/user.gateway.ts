@@ -1,15 +1,15 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets'
-import { UserService } from './user.service'
+import { MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { UserService } from './user.service'
 
 @WebSocketGateway()
 export class UserGateway {
 	constructor(private readonly userService: UserService) {}
 
 	@SubscribeMessage('createUser')
-	create(@MessageBody() createUserDto: CreateUserDto) {
-		return this.userService.create(createUserDto)
+	async create(@MessageBody() createUserDto: CreateUserDto) {
+		return await this.userService.create(createUserDto)
 	}
 
 	@SubscribeMessage('findAllUser')

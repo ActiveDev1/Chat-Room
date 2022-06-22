@@ -6,21 +6,25 @@ import { User, UserDocument } from './schemas/user.schema'
 
 @Injectable()
 export class UserRepository {
-	constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
+	constructor(@InjectModel(User.name) private readonly model: Model<UserDocument>) {}
 
-	async create(createUserDto: CreateUserDto): Promise<User> {
-		return await this.userModel.create(createUserDto)
+	async create(data: CreateUserDto): Promise<User> {
+		return await this.model.create(new this.model(data))
 	}
 
 	async findAll(): Promise<User[]> {
-		return await this.userModel.find()
+		return await this.model.find().lean()
 	}
 
-	async findOne(id: string): Promise<User> {
-		return this.userModel.findOne({ _id: id })
+	async findById(id: string): Promise<User> {
+		return this.model.findOne({ _id: id }).lean()
+	}
+
+	async findOneByUsername(username: string): Promise<User> {
+		return this.model.findOne({ username }).lean()
 	}
 
 	async delete(id: string) {
-		return await this.userModel.findByIdAndRemove({ _id: id })
+		return await this.model.findByIdAndRemove({ _id: id })
 	}
 }

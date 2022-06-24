@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
+import { getNow } from 'src/shared/utils/functions'
 
 export type UserDocument = User & Document
 
@@ -23,7 +24,7 @@ export class User {
 	@Prop({ required: true, default: true })
 	isOnline: boolean
 
-	@Prop({ required: true })
+	@Prop({ required: true, default: () => getNow() })
 	lastSeen: number
 }
 

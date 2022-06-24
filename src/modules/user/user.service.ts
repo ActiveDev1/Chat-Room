@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
+import { getNow } from '../../shared/utils/functions'
 import { hashPassword } from '../../shared/utils/argon2'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './user.repository'
@@ -35,6 +36,6 @@ export class UserService {
 	}
 
 	async setOnline(id: string, isOnline: boolean) {
-		return await this.userRepository.updateOne(id, { isOnline })
+		return await this.userRepository.updateOne(id, { isOnline, lastSeen: getNow() })
 	}
 }

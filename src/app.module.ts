@@ -5,7 +5,8 @@ import { Connection } from 'mongoose'
 import configuration from './config/configuration'
 import { AuthModule } from './modules/auth/auth.module'
 import { UserModule } from './modules/user/user.module'
-import { RoomModule } from './room/room.module'
+import { MessageModule } from './modules/message/message.module'
+import { ChatModule } from './modules/chat/chat.module'
 
 @Module({
 	imports: [
@@ -27,9 +28,10 @@ import { RoomModule } from './room/room.module'
 			}),
 			inject: [ConfigService]
 		}),
-		UserModule,
 		AuthModule,
-		RoomModule
+		UserModule,
+		MessageModule,
+		ChatModule
 	]
 })
 export class AppModule {}

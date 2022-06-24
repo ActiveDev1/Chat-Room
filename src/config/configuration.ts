@@ -14,6 +14,16 @@ export interface DatabaseConfig {
 	uri: string
 }
 
+interface Jwt {
+	secret: string
+	expiresIn: string | number
+}
+
+export interface JwtConfig {
+	access: Jwt
+	refresh: Jwt
+}
+
 export default () => ({
 	server: {
 		restApi: {
@@ -35,5 +45,15 @@ export default () => ({
 		redis: {
 			uri: process.env.REDIS_URI
 		}
-	}
+	},
+	jwt: {
+		access: {
+			secret: process.env.JWT_SECRET_KEY,
+			expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRY
+		},
+		refresh: {
+			secret: process.env.JWT_REFRESH_SECRET_KEY,
+			expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRY
+		}
+	} as JwtConfig
 })

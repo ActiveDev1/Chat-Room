@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
@@ -13,6 +14,7 @@ async function bootstrap() {
 			logger: logger && prettyPrint ? { prettyPrint: { colorize: true } } : logger ? true : false
 		})
 	)
+	app.useGlobalPipes(new ValidationPipe())
 
 	const redisIoAdapter = new RedisIoAdapter(app)
 	await redisIoAdapter.connectToRedis()

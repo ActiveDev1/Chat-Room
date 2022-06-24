@@ -1,7 +1,6 @@
-import { IsString, IsNotEmpty, Length } from 'class-validator'
-import { User } from '../schemas/user.schema'
+import { IsNotEmpty, IsString, Length } from 'class-validator'
 
-export class CreateUserDto implements User {
+export class CreateUserDto {
 	@IsString()
 	@IsNotEmpty()
 	@Length(3, 45)

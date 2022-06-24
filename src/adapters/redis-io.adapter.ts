@@ -5,11 +5,15 @@ import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
 import { ServerOptions } from 'socket.io'
 
+const REDIS_DEFAULT_CONNECTION = 'redis://127.0.0.1:6379/0'
+
 export class RedisIoAdapter extends IoAdapter {
-	redisConnectionUrl: string
+	private redisConnectionUrl: string
+
 	constructor(app: NestFastifyApplication) {
 		super(app)
-		this.redisConnectionUrl = app.get(ConfigService).get<string>('databases.redis.uri')
+		this.redisConnectionUrl =
+			app.get(ConfigService).get<string>('databases.redis.uri') || REDIS_DEFAULT_CONNECTION
 	}
 
 	private adapterConstructor: ReturnType<typeof createAdapter>

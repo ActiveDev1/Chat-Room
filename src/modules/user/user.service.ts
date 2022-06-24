@@ -1,6 +1,5 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { hashPassword } from '../../shared/utils/argon2'
-import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './user.repository'
 
@@ -8,32 +7,34 @@ import { UserRepository } from './user.repository'
 export class UserService {
 	constructor(private readonly userRepository: UserRepository) {}
 
-	async create(createUserDto: CreateUserDto) {
-		const { name, username, password } = createUserDto
-		const user = await this.userRepository.findOneByUsername(username)
+	async findAll() {
+		return await this.userRepository.findAll()
+	}
+
+	async findOne(id: string) {
+		const user = await this.userRepository.findById(id)
+		if (!user) {
+			throw new NotFoundException('User not found')
+		}
+		return user
+	}
+
+	async update(id: string, updateUserDto: UpdateUserDto) {
+		const user = await this.userRepository.findById(id)
 
 		if (user) {
 			throw new UnprocessableEntityException('Duplicate user')
 		}
 
-		const hashedPassword = await hashPassword(password)
+		const hashedPassword = await hashPassword(updateUserDto.password)
 
-		return await this.userRepository.create({ name, username, password: hashedPassword })
+		return await this.userRepository.updateOne(user.id, {
+			...updateUserDto,
+			password: hashedPassword
+		})
 	}
 
-	findAll() {
-		return `This action returns all user`
-	}
-
-	findOne(id: number) {
-		return `This action returns a #${id} user`
-	}
-
-	update(id: number, updateUserDto: UpdateUserDto) {
-		return `This action updates a #${id} user`
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} user`
+	async setOnline(id: string, isOnline: boolean) {
+		return await this.userRepository.updateOne(id, { isOnline })
 	}
 }

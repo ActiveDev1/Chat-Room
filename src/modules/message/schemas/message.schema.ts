@@ -6,7 +6,7 @@ import { MessageContent, MessageContentSchema } from './message-content.schema'
 
 @Schema({ versionKey: false })
 export class Message extends Document {
-	@Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Chat' })
+	@Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Chat' })
 	chat: Chat
 
 	@Prop({ type: MessageContentSchema, required: true })

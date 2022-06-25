@@ -2,10 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { getNow } from 'src/shared/utils/functions'
 
-export type UserDocument = User & Document
-
 @Schema({ versionKey: false })
-export class User {
+export class User extends Document {
 	@Prop({ required: true })
 	name: string
 
@@ -14,6 +12,9 @@ export class User {
 
 	@Prop({ required: true, select: false })
 	password: string
+
+	@Prop({ required: true, index: true })
+	socketId: string
 
 	@Prop({
 		required: true,

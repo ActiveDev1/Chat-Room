@@ -1,5 +1,9 @@
-function getNow() {
+function getNow(): number {
 	return Math.floor(Date.now() / 1000)
 }
 
-export { getNow }
+function generateRandomString(): string {
+	return Math.random().toString(36).slice(2)
+}
+
+export { getNow, generateRandomString }

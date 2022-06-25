@@ -21,19 +21,22 @@ export class UserService {
 		return user
 	}
 
-	async update(id: string, updateUserDto: UpdateUserDto) {
-		const user = await this.userRepository.findById(id)
+	async update(connectionIdentify: ConnectionIdentify, updateUserDto: UpdateUserDto) {
+		let { username, password } = updateUserDto
 
-		if (user) {
-			throw new UnprocessableEntityException('Duplicate user')
+		if (username) {
+			const user = await this.userRepository.findOneByUsername(updateUserDto.username)
+
+			if (user && user.username !== username) {
+				throw new UnprocessableEntityException('Duplicate user')
+			}
 		}
 
-		const hashedPassword = await hashPassword(updateUserDto.password)
+		if (password) {
+			password = await hashPassword(updateUserDto.password)
+		}
 
-		return await this.userRepository.updateOne(user.id, {
-			...updateUserDto,
-			password: hashedPassword
-		})
+		return await this.userRepository.updateOne(connectionIdentify, { ...updateUserDto, password })
 	}
 
 	async setOnline({ userId, socketId }: ConnectionIdentify) {

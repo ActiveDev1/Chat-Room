@@ -1,3 +1,4 @@
+import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common'
 import {
 	ConnectedSocket,
 	MessageBody,
@@ -6,12 +7,15 @@ import {
 	SubscribeMessage,
 	WebSocketGateway
 } from '@nestjs/websockets'
+import { WebsocketExceptionsFilter } from 'src/shared/filters/ws-exception.filter'
 import { Socket } from '../../shared/interfaces/socket.interface'
 import { JwtStrategy } from '../../shared/strategies/jwt.strategy'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'
 
 @WebSocketGateway()
+@UsePipes(new ValidationPipe())
+@UseFilters(WebsocketExceptionsFilter)
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	constructor(
 		private readonly userService: UserService,
@@ -21,10 +25,10 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	async handleConnection(client: Socket) {
 		try {
 			const user = await this.jwtStrategy.validate(
-				client.handshake.headers.authorization.replace('Bearer ', '')
+				client.handshake.auth.Authorization.replace('Bearer ', '')
 			)
 			if (user) {
-				client.userId = user.id
+				client.userId = user._id.toString()
 				await this.userService.setOnline({ userId: user.id, socketId: client.id })
 			} else client.disconnect(true)
 		} catch (error) {

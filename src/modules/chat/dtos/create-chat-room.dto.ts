@@ -1,11 +1,18 @@
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class CreateChatRoomDto {
 	@IsString()
 	@IsNotEmpty()
-	title: string
+	name: string
 
 	@IsString()
-	@IsNotEmpty()
-	roomId: string
+	@IsOptional()
+	publicId: string
+
+	@IsMongoId({ each: true })
+	usersIds: string[]
+
+	@IsBoolean()
+	@IsOptional()
+	isPrivate: boolean
 }

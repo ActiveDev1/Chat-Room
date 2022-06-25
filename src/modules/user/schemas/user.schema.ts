@@ -13,7 +13,7 @@ export class User extends Document {
 	@Prop({ required: true, select: false })
 	password: string
 
-	@Prop({ required: true, index: true })
+	@Prop({ default: null, index: true })
 	socketId: string
 
 	@Prop({

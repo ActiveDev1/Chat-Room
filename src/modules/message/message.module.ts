@@ -1,8 +1,12 @@
-import { Module } from '@nestjs/common';
-import { MessageService } from './message.service';
-import { MessageGateway } from './message.gateway';
+import { Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+import { MessageGateway } from './message.gateway'
+import { MessageRepository } from './message.repository'
+import { MessageService } from './message.service'
+import { Message, MessageSchema } from './schemas/message.schema'
 
 @Module({
-  providers: [MessageGateway, MessageService]
+	imports: [MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }])],
+	providers: [MessageGateway, MessageService, MessageRepository]
 })
 export class MessageModule {}

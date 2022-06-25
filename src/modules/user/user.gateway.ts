@@ -36,21 +36,24 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		await this.userService.setOffline({ userId: client.userId, socketId: client.id })
 	}
 
-	@SubscribeMessage('findAllUser')
+	@SubscribeMessage('user:findAll')
 	async findAll(@ConnectedSocket() client: Socket) {
 		const users = await this.userService.findAll()
-		client.emit('users', users)
+		client.emit('user:getAll', users)
 	}
 
-	@SubscribeMessage('findOneUser')
+	@SubscribeMessage('user:findOne')
 	async findOne(@ConnectedSocket() client: Socket, @MessageBody() id: string) {
 		const user = await this.userService.findOne(id)
-		client.emit('user', user)
+		client.emit('user:getOne', user)
 	}
 
-	@SubscribeMessage('updateUser')
+	@SubscribeMessage('user:update')
 	async update(@ConnectedSocket() client: Socket, @MessageBody() updateUserDto: UpdateUserDto) {
-		const user = await this.userService.update(client.userId, updateUserDto)
-		client.emit('updeatedUser', user)
+		const user = await this.userService.update(
+			{ userId: client.userId, socketId: client.id },
+			updateUserDto
+		)
+		client.emit('user:updated', user)
 	}
 }

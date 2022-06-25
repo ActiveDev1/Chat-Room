@@ -4,10 +4,13 @@ import { Document } from 'mongoose'
 @Schema({ versionKey: false, _id: false })
 export class Room extends Document {
 	@Prop({ required: true })
-	title: string
+	name: string
 
 	@Prop({ required: true })
-	roomId: string
+	publicId: string
+
+	@Prop({ required: true, default: false })
+	isPrivate: boolean
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room)

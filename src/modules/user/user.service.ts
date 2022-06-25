@@ -3,6 +3,7 @@ import { getNow } from '../../shared/utils/functions'
 import { hashPassword } from '../../shared/utils/argon2'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './user.repository'
+import { ConnectionIdentify } from './interfaces/connection-identify.interface'
 
 @Injectable()
 export class UserService {
@@ -35,7 +36,17 @@ export class UserService {
 		})
 	}
 
-	async setOnline(id: string, isOnline: boolean) {
-		return await this.userRepository.updateOne(id, { isOnline, lastSeen: getNow() })
+	async setOnline({ userId, socketId }: ConnectionIdentify) {
+		return await this.userRepository.updateOne(
+			{ userId },
+			{ isOnline: true, socketId, lastSeen: getNow() }
+		)
+	}
+
+	async setOffline({ userId, socketId }: Partial<ConnectionIdentify>) {
+		return await this.userRepository.updateOne(
+			{ userId, socketId },
+			{ isOnline: false, lastSeen: getNow() }
+		)
 	}
 }

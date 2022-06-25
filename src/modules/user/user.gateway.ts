@@ -25,7 +25,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			)
 			if (user) {
 				client.userId = user.id
-				await this.userService.setOnline(client.userId, true)
+				await this.userService.setOnline({ userId: user.id, socketId: client.id })
 			} else client.disconnect(true)
 		} catch (error) {
 			client.disconnect(true)
@@ -33,9 +33,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	async handleDisconnect(client: Socket) {
-		if (client.userId) {
-			await this.userService.setOnline(client.userId, false)
-		}
+		await this.userService.setOffline({ userId: client.userId, socketId: client.id })
 	}
 
 	@SubscribeMessage('findAllUser')

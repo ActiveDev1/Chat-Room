@@ -2,22 +2,18 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema } from 'mongoose'
 import { Message } from '../../../modules/message/schemas/message.schema'
 import { User } from '../../../modules/user/schemas/user.schema'
-
-export type ChatDocument = Chat & Document
+import { Room, RoomSchema } from './room.schema'
 
 @Schema({ versionKey: false })
-export class Chat {
-	@Prop()
-	title: string
-
-	@Prop([{ type: [MongooseSchema.Types.ObjectId], ref: 'User' }])
+export class Chat extends Document {
+	@Prop({ type: [MongooseSchema.Types.ObjectId], required: true, ref: 'User' })
 	users: User[]
 
-	@Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Message' })
+	@Prop({ type: MongooseSchema.Types.ObjectId, default: null, ref: 'Message' })
 	latestMessage: Message
 
-	@Prop({ required: true })
-	isGroup: boolean
+	@Prop({ type: RoomSchema, default: null })
+	room: Room
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat)

@@ -18,7 +18,11 @@ export class UserRepository {
 	}
 
 	async findById(id: string): Promise<User> {
-		return await this.model.findById(id)
+		return await this.model.findById(id).lean()
+	}
+
+	async findByIds(ids: string[]): Promise<User[]> {
+		return await this.model.find({ _id: { $in: ids } }).lean()
 	}
 
 	async findOneByUsername(username: string, selectPass: boolean = false): Promise<User> {

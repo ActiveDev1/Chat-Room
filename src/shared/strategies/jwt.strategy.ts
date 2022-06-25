@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { JwtConfig } from 'src/config/configuration'
-import { UserDocument } from 'src/modules/user/schemas/user.schema'
-import { UserRepository } from 'src/modules/user/user.repository'
+import { JwtConfig } from '../../config/configuration'
+import { User } from '../../modules/user/schemas/user.schema'
+import { UserRepository } from '../../modules/user/user.repository'
 
 @Injectable()
 export class JwtStrategy {
@@ -17,7 +17,7 @@ export class JwtStrategy {
 		return await this.jwtService.verifyAsync(token, this.config.get<JwtConfig>('jwt').access)
 	}
 
-	async validate(token: string): Promise<UserDocument> {
+	async validate(token: string): Promise<User> {
 		const jwtPayload = await this.verifyToken(token)
 		const user = jwtPayload && (await this.userRepository.findById(jwtPayload.id))
 		if (!user) {

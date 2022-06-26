@@ -16,7 +16,7 @@ import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
 @UseFilters(WebsocketExceptionsFilter)
 export class ChatGateway {
 	constructor(private readonly chatService: ChatService) {}
-	roomNamePrefix = 'room-'
+	chatIdPrefix = 'chat-'
 
 	@SubscribeMessage('chat:createWithUser')
 	async createWithUser(
@@ -25,18 +25,18 @@ export class ChatGateway {
 	) {
 		const message = await this.chatService.create(client.userId, body)
 		client.emit('chat:newUser', message)
-		client.join(this.roomNamePrefix + message._id)
+		client.join(this.chatIdPrefix + message._id)
 	}
 
 	@SubscribeMessage('chat:createRoom')
 	async createRoom(@ConnectedSocket() client: Socket, @MessageBody() body: CreateChatRoomDto) {
 		const message = await this.chatService.createRoom(client.userId, body)
 		client.emit('chat:newRoom', message)
-		client.join(this.roomNamePrefix + message._id)
+		client.join(this.chatIdPrefix + message._id)
 	}
 
 	@SubscribeMessage('chat:subscribe')
 	async subscribe(@ConnectedSocket() client: Socket, @MessageBody() body: string) {
-		client.join(this.roomNamePrefix + body)
+		client.join(this.chatIdPrefix + body)
 	}
 }

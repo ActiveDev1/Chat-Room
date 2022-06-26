@@ -30,8 +30,9 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				client.handshake.auth.Authorization.replace('Bearer ', '')
 			)
 			if (user) {
-				client.userId = user._id.toString()
-				await this.userService.setOnline({ userId: user.id, socketId: client.id })
+				const userId = user._id.toString()
+				client.userId = userId
+				await this.userService.setOnline(userId, client.id)
 				const chatsIds = await this.chatService.getChatsIds(user._id)
 				client.join(chatsIds)
 			} else client.disconnect(true)
@@ -41,7 +42,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	async handleDisconnect(client: Socket) {
-		await this.userService.setOffline({ userId: client.userId, socketId: client.id })
+		await this.userService.setOffline(client.userId)
 	}
 
 	@SubscribeMessage('user:findAll')
@@ -58,10 +59,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage('user:update')
 	async update(@ConnectedSocket() client: Socket, @MessageBody() updateUserDto: UpdateUserDto) {
-		const user = await this.userService.update(
-			{ userId: client.userId, socketId: client.id },
-			updateUserDto
-		)
+		const user = await this.userService.update(client.userId, updateUserDto)
 		client.emit('user:updated', user)
 	}
 }

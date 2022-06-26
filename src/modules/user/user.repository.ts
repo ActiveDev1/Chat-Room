@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CreateUserDto } from '../auth/dtos/create-user.dto'
-import { ConnectionIdentify } from './interfaces/connection-identify.interface'
 import { User } from './schemas/user.schema'
 
 @Injectable()
@@ -32,7 +31,7 @@ export class UserRepository {
 			.lean()
 	}
 
-	async updateOne(connectionIdentify: ConnectionIdentify, update: Partial<User>): Promise<User> {
-		return await this.model.findOneAndUpdate(connectionIdentify, update).lean()
+	async updateOne(id: string, update: Partial<User>): Promise<User> {
+		return await this.model.findByIdAndUpdate(id, update).lean()
 	}
 }

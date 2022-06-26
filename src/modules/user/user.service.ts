@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
-import { getNow } from '../../shared/utils/functions'
 import { hashPassword } from '../../shared/utils/argon2'
+import { getNow } from '../../shared/utils/functions'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './user.repository'
-import { ConnectionIdentify } from './interfaces/connection-identify.interface'
 
 @Injectable()
 export class UserService {
@@ -21,7 +20,7 @@ export class UserService {
 		return user
 	}
 
-	async update(connectionIdentify: ConnectionIdentify, updateUserDto: UpdateUserDto) {
+	async update(id: string, updateUserDto: UpdateUserDto) {
 		let { username, password } = updateUserDto
 
 		if (username) {
@@ -36,20 +35,18 @@ export class UserService {
 			password = await hashPassword(updateUserDto.password)
 		}
 
-		return await this.userRepository.updateOne(connectionIdentify, { ...updateUserDto, password })
+		return await this.userRepository.updateOne(id, { ...updateUserDto, password })
 	}
 
-	async setOnline({ userId, socketId }: ConnectionIdentify) {
-		return await this.userRepository.updateOne(
-			{ userId },
-			{ isOnline: true, socketId, lastSeen: getNow() }
-		)
+	async setOnline(id: string, socketId: string) {
+		return await this.userRepository.updateOne(id, {
+			isOnline: true,
+			socketId,
+			lastSeen: getNow()
+		})
 	}
 
-	async setOffline({ userId, socketId }: Partial<ConnectionIdentify>) {
-		return await this.userRepository.updateOne(
-			{ userId, socketId },
-			{ isOnline: false, lastSeen: getNow() }
-		)
+	async setOffline(id: string) {
+		return await this.userRepository.updateOne(id, { isOnline: false, lastSeen: getNow() })
 	}
 }

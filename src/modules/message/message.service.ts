@@ -7,8 +7,8 @@ import { MessageRepository } from './message.repository'
 export class MessageService {
 	constructor(private readonly messageRepository: MessageRepository) {}
 
-	async create(createMessageDto: CreateMessageDto) {
-		return await this.messageRepository.create(createMessageDto)
+	async create(senderId: string, createMessageDto: CreateMessageDto) {
+		return await this.messageRepository.create({ sender: senderId, ...createMessageDto })
 	}
 
 	findAll() {

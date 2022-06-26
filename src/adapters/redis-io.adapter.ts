@@ -3,7 +3,8 @@ import { NestFastifyApplication } from '@nestjs/platform-fastify'
 import { IoAdapter } from '@nestjs/platform-socket.io'
 import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
-import { ServerOptions } from 'socket.io'
+import { Server, ServerOptions } from 'socket.io'
+import { instrument } from '@socket.io/admin-ui'
 
 const REDIS_DEFAULT_CONNECTION = 'redis://127.0.0.1:6379/0'
 
@@ -28,7 +29,15 @@ export class RedisIoAdapter extends IoAdapter {
 	}
 
 	createIOServer(port: number, options?: ServerOptions): any {
-		const server = super.createIOServer(port, options)
+		const server: Server = super.createIOServer(port, {
+			...options,
+			transports: ['websocket']
+		})
+
+		instrument(server, {
+			auth: false
+		})
+
 		server.adapter(this.adapterConstructor)
 		return server
 	}

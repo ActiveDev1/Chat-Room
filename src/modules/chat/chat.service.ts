@@ -10,6 +10,8 @@ import { Chat } from './schemas/chat.schema'
 
 @Injectable()
 export class ChatService {
+	chatIdPrefix = 'chat-'
+
 	constructor(
 		private readonly chatRepository: ChatRepository,
 		private readonly userRepository: UserRepository
@@ -48,5 +50,10 @@ export class ChatService {
 			room: { name, publicId: publicId || generateRandomString(), isPrivate }
 		}
 		return await this.chatRepository.create(newChat)
+	}
+
+	async getChatsIds(userId: string): Promise<string[]> {
+		const chats = await this.chatRepository.findAllByUserId(userId)
+		return chats.map((chat) => this.chatIdPrefix + chat._id.toString())
 	}
 }

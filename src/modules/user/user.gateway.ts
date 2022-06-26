@@ -10,6 +10,7 @@ import {
 import { WebsocketExceptionsFilter } from 'src/shared/filters/ws-exception.filter'
 import { Socket } from '../../shared/interfaces/socket.interface'
 import { JwtStrategy } from '../../shared/strategies/jwt.strategy'
+import { ChatService } from '../chat/chat.service'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'
 
@@ -19,6 +20,7 @@ import { UserService } from './user.service'
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	constructor(
 		private readonly userService: UserService,
+		private readonly chatService: ChatService,
 		private readonly jwtStrategy: JwtStrategy
 	) {}
 
@@ -30,6 +32,8 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			if (user) {
 				client.userId = user._id.toString()
 				await this.userService.setOnline({ userId: user.id, socketId: client.id })
+				const chatsIds = await this.chatService.getChatsIds(user._id)
+				client.join(chatsIds)
 			} else client.disconnect(true)
 		} catch (error) {
 			client.disconnect(true)

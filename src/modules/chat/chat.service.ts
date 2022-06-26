@@ -22,10 +22,10 @@ export class ChatService {
 		}
 
 		const usersIds = [new mongoose.Types.ObjectId(creatorId), user._id]
-		const chat = await this.chatRepository.findByUsersIds(usersIds)
+		const chat = await this.chatRepository.findOneByUsersIds(usersIds)
 
 		if (chat) {
-			throw new NotAcceptableException('Chat with this ID is available')
+			throw new NotAcceptableException('Chat with this user is available')
 		}
 
 		return await this.chatRepository.create({ users: usersIds })

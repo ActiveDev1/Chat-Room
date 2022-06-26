@@ -16,7 +16,7 @@ import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
 @UseFilters(WebsocketExceptionsFilter)
 export class ChatGateway {
 	constructor(private readonly chatService: ChatService) {}
-	chatIdPrefix = 'chat-'
+	chatIdPrefix = 'chat:'
 
 	@SubscribeMessage('chat:createWithUser')
 	async createWithUser(

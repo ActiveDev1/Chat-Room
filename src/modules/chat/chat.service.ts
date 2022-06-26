@@ -10,7 +10,7 @@ import { Chat } from './schemas/chat.schema'
 
 @Injectable()
 export class ChatService {
-	chatIdPrefix = 'chat-'
+	chatIdPrefix = 'chat:'
 
 	constructor(
 		private readonly chatRepository: ChatRepository,

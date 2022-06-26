@@ -21,7 +21,7 @@ export class MessageGateway {
 	server: Server
 
 	constructor(private readonly messageService: MessageService) {}
-	chatIdPrefix = 'chat-'
+	chatIdPrefix = 'chat:'
 
 	@SubscribeMessage('message:send')
 	async send(@ConnectedSocket() client: Socket, @MessageBody() body: CreateMessageDto) {

@@ -17,7 +17,7 @@ export class UserRepository {
 	}
 
 	async findById(id: string): Promise<User> {
-		return await this.model.findById(id).lean()
+		return await this.model.findById(id)
 	}
 
 	async findByIds(ids: string[]): Promise<User[]> {

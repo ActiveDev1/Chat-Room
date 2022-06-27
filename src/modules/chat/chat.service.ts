@@ -56,4 +56,12 @@ export class ChatService {
 		const chats = await this.chatRepository.findAllByUserId(userId)
 		return chats.map((chat) => this.chatIdPrefix + chat._id.toString())
 	}
+
+	async subscribeChatRoom(userId: string, publicId: string) {
+		const chat = await this.chatRepository.findByPublicId(publicId)
+		if (!chat) {
+			throw new NotFoundException('Chat room with this ID is no available')
+		}
+		return await this.chatRepository.updateOne(chat._id, userId)
+	}
 }

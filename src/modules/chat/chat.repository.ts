@@ -13,7 +13,7 @@ export class ChatRepository {
 	}
 
 	async findByPublicId(publicId: string): Promise<Chat> {
-		return await this.model.findOne({ room: { publicId } }).lean()
+		return await this.model.findOne({ 'room.publicId': publicId }).lean()
 	}
 
 	async findOneByUsersIds(usersIds: string[]): Promise<Chat> {
@@ -22,5 +22,11 @@ export class ChatRepository {
 
 	async findAllByUserId(userId: string): Promise<Chat[]> {
 		return await this.model.find({ users: { $in: [userId] } }).lean()
+	}
+
+	async updateOne(id: string, userId: string): Promise<Chat> {
+		return await this.model
+			.findByIdAndUpdate(id, { $addToSet: { users: userId } }, { new: true })
+			.lean()
 	}
 }

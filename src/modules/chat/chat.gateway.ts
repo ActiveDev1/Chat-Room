@@ -10,6 +10,7 @@ import { Socket } from '../../shared/interfaces/socket.interface'
 import { ChatService } from './chat.service'
 import { CreateChatRoomDto } from './dtos/create-chat-room.dto'
 import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
+import { SubscribeChatRoomDto } from './dtos/subscribe-chat-room-dto'
 
 @WebSocketGateway()
 @UsePipes(new ValidationPipe())
@@ -23,20 +24,22 @@ export class ChatGateway {
 		@ConnectedSocket() client: Socket,
 		@MessageBody() body: CreateChatWithUserDto
 	) {
-		const message = await this.chatService.create(client.userId, body)
-		client.emit('chat:newUser', message)
-		client.join(this.chatIdPrefix + message._id)
+		const chat = await this.chatService.create(client.userId, body)
+		client.emit('chat:newUser', chat)
+		client.join(this.chatIdPrefix + chat._id)
 	}
 
 	@SubscribeMessage('chat:createRoom')
 	async createRoom(@ConnectedSocket() client: Socket, @MessageBody() body: CreateChatRoomDto) {
-		const message = await this.chatService.createRoom(client.userId, body)
-		client.emit('chat:newRoom', message)
-		client.join(this.chatIdPrefix + message._id)
+		const chat = await this.chatService.createRoom(client.userId, body)
+		client.emit('chat:newRoom', chat)
+		client.join(this.chatIdPrefix + chat._id)
 	}
 
 	@SubscribeMessage('chat:subscribe')
-	async subscribe(@ConnectedSocket() client: Socket, @MessageBody() body: string) {
-		client.join(this.chatIdPrefix + body)
+	async subscribe(@ConnectedSocket() client: Socket, @MessageBody() body: SubscribeChatRoomDto) {
+		const chat = await this.chatService.subscribeChatRoom(client.userId, body.publicId)
+		client.emit('chat:newRoom', chat)
+		client.join(this.chatIdPrefix + chat._id)
 	}
 }

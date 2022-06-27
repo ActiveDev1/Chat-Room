@@ -33,7 +33,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				const userId = user._id.toString()
 				client.userId = userId
 				await this.userService.setOnline(userId, client.id)
-				const chatsIds = await this.chatService.getChatsIds(user._id)
+				const chatsIds = await this.chatService.getUserChatsIds(user._id)
 				client.join(chatsIds)
 			} else client.disconnect(true)
 		} catch (error) {

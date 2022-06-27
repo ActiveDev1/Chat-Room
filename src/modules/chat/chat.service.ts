@@ -52,7 +52,7 @@ export class ChatService {
 		return await this.chatRepository.create(newChat)
 	}
 
-	async getChatsIds(userId: string): Promise<string[]> {
+	async getUserChatsIds(userId: string): Promise<string[]> {
 		const chats = await this.chatRepository.findAllByUserId(userId)
 		return chats.map((chat) => this.chatIdPrefix + chat._id.toString())
 	}

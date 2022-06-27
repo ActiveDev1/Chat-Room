@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { Types } from 'mongoose'
 import { Model } from 'mongoose'
 import { CreateChat } from './interfaces/create-chat.interface'
 import { Chat } from './schemas/chat.schema'
@@ -25,7 +26,10 @@ export class ChatRepository {
 	}
 
 	async findAllByUserId(userId: string): Promise<Chat[]> {
-		return await this.model.find({ users: { $in: [userId] } }).lean()
+		return await this.model
+			.aggregate()
+			.match({ users: { $in: [new Types.ObjectId(userId)] } })
+			.project({ id: 1, latestMessage: 1, room: { name: 1 } })
 	}
 
 	async pushIdToUsers(id: string, userId: string): Promise<Chat> {

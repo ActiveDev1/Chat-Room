@@ -1,5 +1,4 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common'
-import mongoose from 'mongoose'
 import { generateRandomString } from 'src/shared/utils/functions'
 import { UserRepository } from '../user/user.repository'
 import { ChatRepository } from './chat.repository'
@@ -23,7 +22,7 @@ export class ChatService {
 			throw new NotFoundException('User not found')
 		}
 
-		const usersIds = [new mongoose.Types.ObjectId(creatorId), user._id]
+		const usersIds = [creatorId, user._id]
 		const chat = await this.chatRepository.findOneByUsersIds(usersIds)
 
 		if (chat) {
@@ -50,6 +49,10 @@ export class ChatService {
 			room: { name, publicId: publicId || generateRandomString(), isPrivate }
 		}
 		return await this.chatRepository.create(newChat)
+	}
+
+	async getAll(userId: string): Promise<Chat[]> {
+		return await this.chatRepository.findAllByUserId(userId)
 	}
 
 	async getUserChatsIds(userId: string): Promise<string[]> {

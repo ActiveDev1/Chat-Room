@@ -36,6 +36,12 @@ export class ChatGateway {
 		client.join(this.chatIdPrefix + chat._id)
 	}
 
+	@SubscribeMessage('chat:getAll')
+	async getAll(@ConnectedSocket() client: Socket) {
+		const chat = await this.chatService.getAll(client.userId)
+		client.emit('chat:getChats', chat)
+	}
+
 	@SubscribeMessage('chat:subscribe')
 	async subscribe(@ConnectedSocket() client: Socket, @MessageBody() body: SubscribeChatRoomDto) {
 		const chat = await this.chatService.subscribeChatRoom(client.userId, body.publicId)

@@ -30,9 +30,8 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				client.handshake.auth.Authorization.replace('Bearer ', '')
 			)
 			if (user) {
-				const userId = user._id.toString()
-				client.userId = userId
-				await this.userService.setOnline(userId, client.id)
+				client.userId = user.id
+				await this.userService.setOnline(user.id, client.id)
 				const chatsIds = await this.chatService.getUserChatsIds(user._id)
 				client.join(chatsIds)
 			} else client.disconnect(true)

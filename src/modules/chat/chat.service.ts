@@ -62,6 +62,6 @@ export class ChatService {
 		if (!chat) {
 			throw new NotFoundException('Chat room with this ID is no available')
 		}
-		return await this.chatRepository.updateOne(chat._id, userId)
+		return await this.chatRepository.pushIdToUsers(chat._id, userId)
 	}
 }

@@ -12,6 +12,10 @@ export class ChatRepository {
 		return await new this.model(data).save()
 	}
 
+	async findById(id: string): Promise<Chat> {
+		return await this.model.findById(id).lean()
+	}
+
 	async findByPublicId(publicId: string): Promise<Chat> {
 		return await this.model.findOne({ 'room.publicId': publicId }).lean()
 	}
@@ -24,9 +28,15 @@ export class ChatRepository {
 		return await this.model.find({ users: { $in: [userId] } }).lean()
 	}
 
-	async updateOne(id: string, userId: string): Promise<Chat> {
+	async pushIdToUsers(id: string, userId: string): Promise<Chat> {
 		return await this.model
 			.findByIdAndUpdate(id, { $addToSet: { users: userId } }, { new: true })
+			.lean()
+	}
+
+	async updateLastestMessage(id: string, messageId: string): Promise<Chat> {
+		return await this.model
+			.findByIdAndUpdate(id, { $set: { latestMessage: messageId } }, { new: true })
 			.lean()
 	}
 }

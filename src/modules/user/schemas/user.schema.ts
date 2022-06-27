@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { getNow } from 'src/shared/utils/functions'
 
-@Schema({ versionKey: false })
-export class User extends Document {
+@Schema({ versionKey: false, id: true })
+class User extends Document {
 	@Prop({ required: true })
 	name: string
 
@@ -29,4 +29,7 @@ export class User extends Document {
 	lastSeen: number
 }
 
-export const UserSchema = SchemaFactory.createForClass(User)
+const UserSchema = SchemaFactory.createForClass(User)
+UserSchema.plugin(require('mongoose-unix-timestamp'))
+
+export { User, UserSchema }

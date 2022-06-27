@@ -3,8 +3,8 @@ import { Document, Schema as MongooseSchema } from 'mongoose'
 import { Message } from '../../../modules/message/schemas/message.schema'
 import { Room, RoomSchema } from './room.schema'
 
-@Schema({ versionKey: false })
-export class Chat extends Document {
+@Schema({ versionKey: false, id: true })
+class Chat extends Document {
 	@Prop({ type: [MongooseSchema.Types.ObjectId], required: true, ref: 'User' })
 	users: string[]
 
@@ -15,4 +15,7 @@ export class Chat extends Document {
 	room: Room
 }
 
-export const ChatSchema = SchemaFactory.createForClass(Chat)
+const ChatSchema = SchemaFactory.createForClass(Chat)
+ChatSchema.plugin(require('mongoose-unix-timestamp'), { tag: 'mongoose-unix-timestamp' })
+
+export { Chat, ChatSchema }

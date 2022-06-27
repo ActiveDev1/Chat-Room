@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose'
 import { MessageContent, MessageContentSchema } from './message-content.schema'
 
 @Schema({ versionKey: false })
-export class Message extends Document {
+class Message extends Document {
 	@Prop({ type: Types.ObjectId, ref: 'Chat' })
 	chatId: Types.ObjectId
 
@@ -14,4 +14,7 @@ export class Message extends Document {
 	sender: Types.ObjectId
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message)
+const MessageSchema = SchemaFactory.createForClass(Message)
+MessageSchema.plugin(require('mongoose-unix-timestamp'))
+
+export { Message, MessageSchema }

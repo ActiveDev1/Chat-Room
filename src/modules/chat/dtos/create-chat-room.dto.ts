@@ -9,6 +9,7 @@ export class CreateChatRoomDto {
 	@IsOptional()
 	publicId: string
 
+	@IsOptional()
 	@IsMongoId({ each: true })
 	usersIds: string[]
 

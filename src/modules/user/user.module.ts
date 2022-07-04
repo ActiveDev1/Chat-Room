@@ -10,6 +10,15 @@ import { UserService } from './user.service'
 
 @Module({
 	imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), ChatModule],
-	providers: [UserGateway, UserService, JwtService, JwtStrategy, UserRepository]
+	providers: [
+		UserGateway,
+		UserService,
+		JwtService,
+		JwtStrategy,
+		{
+			provide: 'UserRepository',
+			useClass: UserRepository
+		}
+	]
 })
 export class UserModule {}

@@ -1,15 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
+import { UserRepositoryInterface } from 'src/modules/user/interfaces/user.repository.interface'
 import { JwtConfig } from '../../config/configuration'
 import { User } from '../../modules/user/schemas/user.schema'
-import { UserRepository } from '../../modules/user/user.repository'
 
 @Injectable()
 export class JwtStrategy {
 	constructor(
+		@Inject('UserRepository')
+		private readonly userRepository: UserRepositoryInterface,
 		private readonly jwtService: JwtService,
-		private readonly userRepository: UserRepository,
 		private readonly config: ConfigService
 	) {}
 

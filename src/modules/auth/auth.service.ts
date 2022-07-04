@@ -1,10 +1,15 @@
-import { ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common'
+import {
+	ForbiddenException,
+	Inject,
+	Injectable,
+	UnprocessableEntityException
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { JwtConfig } from '../../config/configuration'
-import { UserRepository } from '../user/user.repository'
 import { JwtPayload } from '../../shared/interfaces/jwt-payload.interface'
 import { hashPassword, verifyPassword } from '../../shared/utils/argon2'
+import { UserRepositoryInterface } from '../user/interfaces/user.repository.interface'
 import { CreateUserDto } from './dtos/create-user.dto'
 import { LoginDto } from './dtos/login.dto'
 import { Tokens } from './interfaces/token.interface'
@@ -12,7 +17,8 @@ import { Tokens } from './interfaces/token.interface'
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly userRepository: UserRepository,
+		@Inject('UserRepository')
+		private readonly userRepository: UserRepositoryInterface,
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService
 	) {}

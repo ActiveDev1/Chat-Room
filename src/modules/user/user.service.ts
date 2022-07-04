@@ -1,12 +1,15 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { hashPassword } from '../../shared/utils/argon2'
 import { getNow } from '../../shared/utils/functions'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { UserRepository } from './user.repository'
+import { UserRepositoryInterface } from './interfaces/user.repository.interface'
 
 @Injectable()
 export class UserService {
-	constructor(private readonly userRepository: UserRepository) {}
+	constructor(
+		@Inject('UserRepository')
+		private readonly userRepository: UserRepositoryInterface
+	) {}
 
 	async findAll() {
 		return await this.userRepository.findAll()

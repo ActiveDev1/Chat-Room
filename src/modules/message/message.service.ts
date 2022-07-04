@@ -1,14 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { ChatRepository } from '../chat/chat.repository'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { ChatRepositoryInterface } from '../chat/interfaces/chat.repository.interface'
 import { CreateMessageDto } from './dto/create-message.dto'
 import { UpdateMessageDto } from './dto/update-message.dto'
-import { MessageRepository } from './message.repository'
+import { CreateMessage } from './interfaces/create-message.interface'
+import { MessageRepositoryInterface } from './interfaces/message.repository.interface'
 
 @Injectable()
 export class MessageService {
 	constructor(
-		private readonly messageRepository: MessageRepository,
-		private readonly chatRepository: ChatRepository
+		@Inject('MessageRepository')
+		private readonly messageRepository: MessageRepositoryInterface,
+		@Inject('ChatRepository')
+		private readonly chatRepository: ChatRepositoryInterface
 	) {}
 
 	async create(senderId: string, createMessageDto: CreateMessageDto) {
@@ -17,7 +20,11 @@ export class MessageService {
 			throw new NotFoundException('Chat not found')
 		}
 
-		const message = await this.messageRepository.create({ sender: senderId, ...createMessageDto })
+		const message = await this.messageRepository.create<CreateMessage>({
+			sender: senderId,
+			...createMessageDto
+		})
+
 		await this.chatRepository.updateLastestMessage(chat._id, message._id)
 		return message
 	}

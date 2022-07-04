@@ -15,7 +15,10 @@ import { Chat, ChatSchema } from './schemas/chat.schema'
 	providers: [
 		ChatGateway,
 		ChatService,
-		ChatRepository,
+		{
+			provide: 'ChatRepository',
+			useClass: ChatRepository
+		},
 		{
 			provide: 'UserRepository',
 			useClass: UserRepository

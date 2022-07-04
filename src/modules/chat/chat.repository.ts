@@ -1,20 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import { Model } from 'mongoose'
-import { CreateChat } from './interfaces/create-chat.interface'
+import { Model, Types } from 'mongoose'
+import { BaseAbstractRepository } from '../../shared/abstracts/base.abstract.repository'
+import { ChatRepositoryInterface } from './interfaces/chat.repository.interface'
 import { Chat } from './schemas/chat.schema'
 
 @Injectable()
-export class ChatRepository {
-	constructor(@InjectModel(Chat.name) private readonly model: Model<Chat>) {}
-
-	async create(data: CreateChat): Promise<Chat> {
-		return await new this.model(data).save()
-	}
-
-	async findById(id: string): Promise<Chat> {
-		return await this.model.findById(id).lean()
+export class ChatRepository
+	extends BaseAbstractRepository<Chat>
+	implements ChatRepositoryInterface
+{
+	constructor(@InjectModel(Chat.name) readonly model: Model<Chat>) {
+		super(model)
 	}
 
 	async findByPublicId(publicId: string): Promise<Chat> {

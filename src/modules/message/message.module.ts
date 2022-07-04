@@ -12,6 +12,17 @@ import { Message, MessageSchema } from './schemas/message.schema'
 		MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
 		MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }])
 	],
-	providers: [MessageGateway, MessageService, MessageRepository, ChatRepository]
+	providers: [
+		MessageGateway,
+		MessageService,
+		{
+			provide: 'MessageRepository',
+			useClass: MessageRepository
+		},
+		{
+			provide: 'ChatRepository',
+			useClass: ChatRepository
+		}
+	]
 })
 export class MessageModule {}

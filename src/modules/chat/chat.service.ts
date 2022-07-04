@@ -4,6 +4,7 @@ import { UserRepositoryInterface } from '../user/interfaces/user.repository.inte
 import { ChatRepository } from './chat.repository'
 import { CreateChatRoomDto } from './dtos/create-chat-room.dto'
 import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
+import { ChatRepositoryInterface } from './interfaces/chat.repository.interface'
 import { CreateChat } from './interfaces/create-chat.interface'
 import { Chat } from './schemas/chat.schema'
 
@@ -14,7 +15,8 @@ export class ChatService {
 	constructor(
 		@Inject('UserRepository')
 		private readonly userRepository: UserRepositoryInterface,
-		private readonly chatRepository: ChatRepository
+		@Inject('ChatRepository')
+		private readonly chatRepository: ChatRepositoryInterface
 	) {}
 
 	async create(creatorId: string, { username }: CreateChatWithUserDto): Promise<Chat> {
@@ -30,7 +32,7 @@ export class ChatService {
 			throw new NotAcceptableException('Chat with this user is available')
 		}
 
-		return await this.chatRepository.create({ users: usersIds })
+		return await this.chatRepository.create<Pick<CreateChat, 'users'>>({ users: usersIds })
 	}
 
 	async createRoom(creatorId: string, createChatRoomDto: CreateChatRoomDto): Promise<Chat> {

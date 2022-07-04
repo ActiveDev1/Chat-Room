@@ -6,7 +6,7 @@ export abstract class BaseAbstractRepository<T extends Document>
 {
 	protected constructor(protected readonly model: Model<T>) {}
 
-	async create(data: T | any): Promise<T> {
+	async create<U>(data: U): Promise<T> {
 		return await new this.model(data).save()
 	}
 

@@ -32,7 +32,12 @@ export class AuthService {
 		}
 
 		const hashedPassword = await hashPassword(password)
-		const newUser = await this.userRepository.create({ name, username, password: hashedPassword })
+		const newUser = await this.userRepository.create<CreateUserDto>({
+			name,
+			username,
+			password: hashedPassword
+		})
+
 		return await this.sendAuthorizedMessage(newUser.id)
 	}
 

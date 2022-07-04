@@ -1,5 +1,5 @@
 export interface BaseInterfaceRepository<T> {
-	create(data: T | any): Promise<T>
+	create<U>(data: U): Promise<T>
 
 	findById(id: string): Promise<T>
 

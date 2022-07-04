@@ -7,7 +7,7 @@ import {
 	SubscribeMessage,
 	WebSocketGateway
 } from '@nestjs/websockets'
-import { WebsocketExceptionsFilter } from 'src/shared/filters/ws-exception.filter'
+import { WebsocketExceptionsFilter } from '../../shared/filters/ws-exception.filter'
 import { Socket } from '../../shared/interfaces/socket.interface'
 import { JwtStrategy } from '../../shared/strategies/jwt.strategy'
 import { ChatService } from '../chat/chat.service'

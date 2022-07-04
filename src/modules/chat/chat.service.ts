@@ -1,7 +1,6 @@
 import { Inject, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common'
-import { generateRandomString } from 'src/shared/utils/functions'
+import { generateRandomString } from '../../shared/utils/functions'
 import { UserRepositoryInterface } from '../user/interfaces/user.repository.interface'
-import { ChatRepository } from './chat.repository'
 import { CreateChatRoomDto } from './dtos/create-chat-room.dto'
 import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
 import { ChatRepositoryInterface } from './interfaces/chat.repository.interface'

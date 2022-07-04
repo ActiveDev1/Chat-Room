@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { getNow } from 'src/shared/utils/functions'
+import { getNow } from '../../../shared/utils/functions'
 
 @Schema({ versionKey: false, id: true })
 class User extends Document {

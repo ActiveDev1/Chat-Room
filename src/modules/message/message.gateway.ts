@@ -7,7 +7,7 @@ import {
 	WebSocketServer
 } from '@nestjs/websockets'
 import { Server } from 'socket.io'
-import { WebsocketExceptionsFilter } from 'src/shared/filters/ws-exception.filter'
+import { WebsocketExceptionsFilter } from '../../shared/filters/ws-exception.filter'
 import { Socket } from '../../shared/interfaces/socket.interface'
 import { CreateMessageDto } from './dto/create-message.dto'
 import { UpdateMessageDto } from './dto/update-message.dto'

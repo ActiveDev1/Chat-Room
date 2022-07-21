@@ -52,7 +52,7 @@ export class AuthService {
 		return await this.sendAuthorizedMessage(user.id)
 	}
 
-	async validateUser(username: string, password: string) {
+	private async validateUser(username: string, password: string) {
 		const user = await this.userRepository.findOneByUsername(username, true)
 		if (user && (await verifyPassword(user.password, password))) {
 			const { password, ...result } = user

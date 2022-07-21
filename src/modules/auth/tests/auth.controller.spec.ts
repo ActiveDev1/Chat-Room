@@ -21,6 +21,8 @@ describe('AuthController', () => {
 
 		authController = moduleRef.get<AuthController>(AuthController)
 		authService = moduleRef.get<AuthService>(AuthService)
+
+		jest.clearAllMocks()
 	})
 
 	describe('signup', () => {

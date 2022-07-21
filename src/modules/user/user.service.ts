@@ -12,7 +12,7 @@ export class UserService {
 	) {}
 
 	async findAll() {
-		return await this.userRepository.findAll()
+		return await this.userRepository.find()
 	}
 
 	async findOne(id: string) {

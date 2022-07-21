@@ -53,7 +53,7 @@ export class AuthService {
 	}
 
 	private async validateUser(username: string, password: string) {
-		const user = await this.userRepository.findOneByUsername(username, true)
+		const user = await this.userRepository.findOne({ username }, { password: true })
 		if (user && (await verifyPassword(user.password, password))) {
 			const { password, ...result } = user
 			return result

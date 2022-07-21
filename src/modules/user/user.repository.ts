@@ -15,11 +15,11 @@ export class UserRepository
 	}
 
 	async findByIds(ids: string[]): Promise<UserDocument[]> {
-		return await this.model.find({ _id: { $in: ids } }).lean()
+		return await this.model.find({ _id: { $in: ids } })
 	}
 
-	async findOneByUsername(username: string, selectPass: boolean = false): Promise<UserDocument> {
-		return await this.model.findOne({ username }).select(`${selectPass ? '+password' : ''}`)
+	async findOneByUsername(username: string): Promise<UserDocument> {
+		return await this.model.findOne({ username })
 	}
 
 	async updateOne(id: string, update: Partial<User>): Promise<User> {

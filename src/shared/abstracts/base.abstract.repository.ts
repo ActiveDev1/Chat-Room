@@ -8,7 +8,7 @@ export abstract class BaseAbstractRepository<T> implements BaseInterfaceReposito
 		return await new this.model(data).save()
 	}
 
-	async findById(id: string): Promise<T & Document> {
+	async findById(id: string): Promise<(T & Document) | null> {
 		return await this.model.findById(id)
 	}
 
@@ -16,19 +16,23 @@ export abstract class BaseAbstractRepository<T> implements BaseInterfaceReposito
 		query: FilterQuery<T>,
 		projection?: ProjectionType<T>,
 		options?: QueryOptions<T>
-	): Promise<T> {
+	): Promise<(T & Document) | null> {
 		return await this.model.findOne(query, projection, options)
 	}
 
-	async findAll(): Promise<T[]> {
-		return await this.model.find().lean()
+	async find(query?: FilterQuery<T>): Promise<T[] | null> {
+		return await this.model.find(query, {}, { lean: true })
 	}
 
-	async update(id: string, updateData: UpdateQuery<Partial<T>>, options?: QueryOptions<T>) {
+	async update(
+		id: string,
+		updateData: UpdateQuery<Partial<T>>,
+		options?: QueryOptions<T>
+	): Promise<T | null> {
 		return await this.model.findByIdAndUpdate(id, updateData, { ...options, new: true })
 	}
 
-	async delete(id: string): Promise<T> {
+	async delete(id: string): Promise<T | null> {
 		return await this.model.findByIdAndDelete(id)
 	}
 }

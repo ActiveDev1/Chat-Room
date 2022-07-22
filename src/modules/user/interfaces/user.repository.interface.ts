@@ -3,6 +3,6 @@ import { User, UserDocument } from '../schemas/user.schema'
 
 export interface UserRepositoryInterface extends BaseInterfaceRepository<User> {
 	findByIds(ids: string[]): Promise<UserDocument[]>
-	findOneByUsername(username: string, selectPass?: boolean): Promise<UserDocument>
+	findOneByUsername(username: string): Promise<UserDocument>
 	updateOne(id: string, update: Partial<User>): Promise<User>
 }

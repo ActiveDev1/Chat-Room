@@ -16,7 +16,7 @@ import { UserService } from './user.service'
 		JwtService,
 		JwtStrategy,
 		{
-			provide: 'UserRepository',
+			provide: UserRepository.name,
 			useClass: UserRepository
 		}
 	]

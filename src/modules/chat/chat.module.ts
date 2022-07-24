@@ -20,7 +20,7 @@ import { Chat, ChatSchema } from './schemas/chat.schema'
 			useClass: ChatRepository
 		},
 		{
-			provide: 'UserRepository',
+			provide: UserRepository.name,
 			useClass: UserRepository
 		}
 	],

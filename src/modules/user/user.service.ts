@@ -3,11 +3,12 @@ import { hashPassword } from '../../shared/utils/argon2'
 import { getNow } from '../../shared/utils/functions'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepositoryInterface } from './interfaces/user.repository.interface'
+import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {
 	constructor(
-		@Inject('UserRepository')
+		@Inject(UserRepository.name)
 		private readonly userRepository: UserRepositoryInterface
 	) {}
 

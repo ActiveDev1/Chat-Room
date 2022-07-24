@@ -23,7 +23,7 @@ import { AuthService } from './auth.service'
 	providers: [
 		AuthService,
 		{
-			provide: 'UserRepository',
+			provide: UserRepository.name,
 			useClass: UserRepository
 		}
 	]

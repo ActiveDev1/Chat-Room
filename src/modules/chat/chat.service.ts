@@ -1,6 +1,7 @@
 import { Inject, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common'
 import { generateRandomString } from '../../shared/utils/functions'
 import { UserRepositoryInterface } from '../user/interfaces/user.repository.interface'
+import { UserRepository } from '../user/user.repository'
 import { CreateChatRoomDto } from './dtos/create-chat-room.dto'
 import { CreateChatWithUserDto } from './dtos/create-chat-with-user.dto'
 import { ChatRepositoryInterface } from './interfaces/chat.repository.interface'
@@ -12,7 +13,7 @@ export class ChatService {
 	chatIdPrefix = 'chat:'
 
 	constructor(
-		@Inject('UserRepository')
+		@Inject(UserRepository.name)
 		private readonly userRepository: UserRepositoryInterface,
 		@Inject('ChatRepository')
 		private readonly chatRepository: ChatRepositoryInterface

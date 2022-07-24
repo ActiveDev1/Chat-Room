@@ -8,8 +8,9 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { JwtConfig } from '../../config/configuration'
 import { JwtPayload } from '../../shared/interfaces/jwt-payload.interface'
-import { hashPassword, verifyPassword } from '../../shared/utils/argon2'
+import * as argon from '../../shared/utils/argon2'
 import { UserRepositoryInterface } from '../user/interfaces/user.repository.interface'
+import { UserRepository } from '../user/user.repository'
 import { CreateUserDto } from './dtos/create-user.dto'
 import { LoginDto } from './dtos/login.dto'
 import { Tokens } from './interfaces/token.interface'
@@ -17,7 +18,7 @@ import { Tokens } from './interfaces/token.interface'
 @Injectable()
 export class AuthService {
 	constructor(
-		@Inject('UserRepository')
+		@Inject(UserRepository.name)
 		private readonly userRepository: UserRepositoryInterface,
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService
@@ -31,7 +32,7 @@ export class AuthService {
 			throw new UnprocessableEntityException('Duplicate user')
 		}
 
-		const hashedPassword = await hashPassword(password)
+		const hashedPassword = await argon.hashPassword(password)
 		const newUser = await this.userRepository.create<CreateUserDto>({
 			name,
 			username,
@@ -52,16 +53,16 @@ export class AuthService {
 		return await this.sendAuthorizedMessage(user.id)
 	}
 
-	private async validateUser(username: string, password: string) {
+	async validateUser(username: string, password: string) {
 		const user = await this.userRepository.findOne({ username }, { password: true })
-		if (user && (await verifyPassword(user.password, password))) {
+		if (user && (await argon.verifyPassword(user.password, password))) {
 			const { password, ...result } = user
 			return result
 		}
 		return null
 	}
 
-	private async sendAuthorizedMessage(userId: string): Promise<Tokens> {
+	async sendAuthorizedMessage(userId: string): Promise<Tokens> {
 		const payload: JwtPayload = { id: userId }
 		const { access, refresh } = this.configService.get<JwtConfig>('jwt')
 

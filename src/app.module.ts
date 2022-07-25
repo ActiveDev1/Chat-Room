@@ -5,6 +5,7 @@ import configuration from './config/configuration'
 import { AuthModule } from './modules/auth/auth.module'
 import { ChatModule } from './modules/chat/chat.module'
 import { MessageModule } from './modules/message/message.module'
+import { MinioModule } from './modules/services/minio/minio.module'
 import { UserModule } from './modules/user/user.module'
 
 @Module({
@@ -14,7 +15,7 @@ import { UserModule } from './modules/user/user.module'
 			cache: true,
 			expandVariables: true,
 			load: [configuration],
-			envFilePath: `.env.development`
+			envFilePath: process.env.NODE_ENV === 'development' ? `.env.development` : '.env.prod'
 		}),
 		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
@@ -26,7 +27,8 @@ import { UserModule } from './modules/user/user.module'
 		AuthModule,
 		UserModule,
 		MessageModule,
-		ChatModule
+		ChatModule,
+		MinioModule
 	]
 })
 export class AppModule {}

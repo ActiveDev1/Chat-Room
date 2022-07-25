@@ -13,27 +13,10 @@ import { CreateUserDto } from '../dtos/create-user.dto'
 import { LoginDto } from '../dtos/login.dto'
 import { Tokens } from '../interfaces/token.interface'
 import { UserRepository as MockUserRepository } from '../__mocks__/user.repository'
+import { ConfigService as MockConfigService } from '../../../shared/tests/__mocks__/config.service'
 import { authStub } from './stubs/auth.stub'
 import { jwtStub } from './stubs/jwt.stub'
 import { userStub } from './stubs/user.stub'
-
-const fakeJwtConfig: JwtConfig = {
-	access: { secret: 'strongSecret', expiresIn: 3600 },
-	refresh: { secret: 'asdasd', expiresIn: 3600 }
-}
-
-function getFakeConfig<T>(key: string): T {
-	const configs = {
-		jwt: fakeJwtConfig
-	}
-	return configs[key] || null
-}
-
-const mockConfig = {
-	get: jest.fn((key: string) => {
-		return getFakeConfig(key)
-	})
-}
 
 describe('AuthService', () => {
 	let authService: AuthService
@@ -52,7 +35,7 @@ describe('AuthService', () => {
 				},
 				{
 					provide: ConfigService,
-					useValue: mockConfig
+					useValue: MockConfigService
 				}
 			]
 		}).compile()

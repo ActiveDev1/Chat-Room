@@ -5,7 +5,6 @@ import configuration from './config/configuration'
 import { AuthModule } from './modules/auth/auth.module'
 import { ChatModule } from './modules/chat/chat.module'
 import { MessageModule } from './modules/message/message.module'
-import { MinioModule } from './modules/services/minio/minio.module'
 import { UserModule } from './modules/user/user.module'
 
 @Module({
@@ -27,8 +26,7 @@ import { UserModule } from './modules/user/user.module'
 		AuthModule,
 		UserModule,
 		MessageModule,
-		ChatModule,
-		MinioModule
+		ChatModule
 	]
 })
 export class AppModule {}

@@ -3,14 +3,14 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 import { BaseAbstractRepository } from '../../shared/abstracts/base.abstract.repository'
 import { ChatRepositoryInterface } from './interfaces/chat.repository.interface'
-import { Chat } from './schemas/chat.schema'
+import { Chat, ChatDocument } from './schemas/chat.schema'
 
 @Injectable()
 export class ChatRepository
 	extends BaseAbstractRepository<Chat>
 	implements ChatRepositoryInterface
 {
-	constructor(@InjectModel(Chat.name) readonly model: Model<Chat>) {
+	constructor(@InjectModel(Chat.name) readonly model: Model<ChatDocument>) {
 		super(model)
 	}
 

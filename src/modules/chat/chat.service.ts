@@ -63,7 +63,7 @@ export class ChatService {
 		return chats.map((chat) => this.chatIdPrefix + chat._id.toString())
 	}
 
-	async subscribeChatRoom(userId: string, publicId: string) {
+	async subscribeChatRoom(userId: string, publicId: string): Promise<Chat> {
 		const chat = await this.chatRepository.findByPublicId(publicId)
 		if (!chat) {
 			throw new NotFoundException('Chat room with this ID is no available')

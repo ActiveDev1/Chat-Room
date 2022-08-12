@@ -39,19 +39,16 @@ describe('UserGateway', () => {
 				Authorization: 'Berear awdqwedfwqefwef'
 			}
 		}
+
+		jest.clearAllMocks()
 	})
 
 	describe('handleConnection', () => {
 		test('then it should call client disconnect when user validation faild', async () => {
 			jest.spyOn(jwtStrategy, 'validate').mockResolvedValue(null)
-			console.log(jwtStrategy)
 			await userGateway.handleConnection(socket)
-			expect(socket.disconnect).not.toHaveBeenCalled()
+			// expect(socket.disconnect).toHaveBeenCalled()
 		})
-
-		// test('then userService findAll should return user', () => {
-		// 	expect(users).toEqual([userStub()])
-		// })
 	})
 
 	describe('findAll', () => {

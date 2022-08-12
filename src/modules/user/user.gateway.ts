@@ -25,19 +25,18 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	) {}
 
 	async handleConnection(client: Socket) {
-		try {
-			const user = await this.jwtStrategy.validate(
-				client.handshake.auth.Authorization.replace('Bearer ', '')
-			)
-			if (user) {
-				client.userId = user.id
-				await this.userService.setOnline(user.id, client.id)
-				const chatsIds = await this.chatService.getUserChatsIds(user._id)
-				client.join(chatsIds)
-			} else client.disconnect(true)
-		} catch (error) {
-			client.disconnect(true)
+		const user = await this.jwtStrategy.validate(
+			client.handshake.auth.Authorization.replace('Bearer ', '')
+		)
+
+		if (!user) {
+			return client.disconnect(true)
 		}
+
+		client.userId = user.id
+		await this.userService.setOnline(user.id, client.id)
+		const chatsIds = await this.chatService.getUserChatsIds(user._id)
+		client.join(chatsIds)
 	}
 
 	async handleDisconnect(client: Socket) {

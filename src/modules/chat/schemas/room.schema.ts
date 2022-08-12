@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
+type RoomDocument = Room & Document
+
 @Schema({ versionKey: false, _id: false })
-export class Room extends Document {
+class Room {
 	@Prop({ required: true })
 	name: string
 
@@ -13,4 +15,6 @@ export class Room extends Document {
 	isPrivate: boolean
 }
 
-export const RoomSchema = SchemaFactory.createForClass(Room)
+const RoomSchema = SchemaFactory.createForClass(Room)
+
+export { Room, RoomDocument, RoomSchema }

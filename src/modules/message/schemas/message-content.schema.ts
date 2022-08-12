@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
+type MessageContentDocument = MessageContent & Document
+
 @Schema({ _id: false })
-export class MessageContent extends Document {
+class MessageContent {
 	@Prop({ required: true })
 	text: string
 
@@ -10,4 +12,6 @@ export class MessageContent extends Document {
 	image: string
 }
 
-export const MessageContentSchema = SchemaFactory.createForClass(MessageContent)
+const MessageContentSchema = SchemaFactory.createForClass(MessageContent)
+
+export { MessageContent, MessageContentDocument, MessageContentSchema }

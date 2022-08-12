@@ -5,6 +5,7 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { RedisIoAdapter } from './adapters/redis-io.adapter'
 import { AppModule } from './app.module'
 import { RestApiConfig } from './config/configuration'
+import { TransformInterceptor } from './shared/interceptors/response-transform.interceptor'
 
 async function bootstrap() {
 	const [logger, prettyPrint] = [process.env.REST_LOGGER, process.env.REST_PRETTY_LOGGER]
@@ -14,6 +15,7 @@ async function bootstrap() {
 			logger: logger && prettyPrint ? { prettyPrint: { colorize: true } } : logger ? true : false
 		})
 	)
+	app.useGlobalInterceptors(new TransformInterceptor())
 	app.useGlobalPipes(new ValidationPipe())
 
 	const redisIoAdapter = new RedisIoAdapter(app)

@@ -29,8 +29,8 @@ export default () => ({
 		restApi: {
 			host: process.env.REST_HOST,
 			port: +process.env.REST_PORT,
-			logger: !!process.env.REST_LOGGER,
-			prettyLogger: !!process.env.REST_PRETTY_LOGGER
+			logger: !!+process.env.REST_LOGGER,
+			prettyLogger: !!+process.env.REST_PRETTY_LOGGER
 		} as RestApiConfig
 	},
 	databases: {
